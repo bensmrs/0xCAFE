@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Lato&display=swap');
 
+html {
+  height  : 100%;
+  overflow: hidden;
+  position: relative;
+}
+
 #main {
   width: 650px;
   height: 420px;
@@ -19,12 +25,16 @@ body {
   border: 0;
   background: #fff;
   font-family: "Lato", sans-serif;
+  height  : 100%;
+  overflow: hidden;
+  position: relative;
+  touch-action: none;
 }
 #main:not(.full) #amount:before {
   content: "Donner ";
 }
 #amount:after {
-  content: " €";
+  content: " €";
 }
 #amount {
   font-size: 20px;
@@ -42,11 +52,13 @@ body {
   text-align: right;
   margin: 0 10px;
   transition: all .2s ease;
-  appearance: textfield;
+  outline: none;
   font-size: 20px;
   height: 35px;
   background: #fff;
   color: #000;
+  -webkit-appearance: none;
+  appearance: textfield;
 }
 #main .button {
   display: inline-block;
@@ -57,13 +69,20 @@ body {
   cursor: pointer;
   transition: all .2s ease;
   border: 2px solid transparent;
+  background: #fff;
+}
+button {
+  appearance: none;
+  outline: none;
 }
 #default-amounts {
   width: 50%;
-  margin-left: 25%;
+  left: 25%;
   text-align: center;
   opacity: 1;
   transition: all .2s ease;
+  position: absolute;
+  top: 60%;
 }
 .button:not(:last-child) {
   margin-right: 15px;
@@ -127,8 +146,13 @@ body {
   box-shadow: 0 2px 9px -4px #000;
   font-size: 16px;
   cursor: pointer;
-  transition: .5s all ease, 0s color;
+  transition: .5s all ease, 0s color, .1s box-shadow ease;
   display: inline-block;
+  outline: none;
+}
+#main #pay:focus, #main #pay:active {
+  box-shadow: 0 2px 9px -4px #000, inset 0 0 0 2px #fff6;
+  background: #fff2;
 }
 #main #pay:hover {
   background: #fff3;
@@ -146,7 +170,6 @@ body {
 }
 #tax {
   font-size: 13px;
-  display: inline-block;
 }
 #amounts {
   margin-bottom: 20px;
@@ -156,8 +179,10 @@ body {
   width: 60%;
   left: 20%;
   border-radius: 15px;
-  padding: 10px 0;
   display: inline-block;
+  text-align: center;
+  top: 10%;
+  padding: 10px 0;
 }
 
 #main.loading #pay {
@@ -237,7 +262,7 @@ body {
 }
 
 .hidden {
-  display: none !important;
+  opacity: 0;
 }
 
 #card-error {
@@ -253,12 +278,11 @@ body {
 }
 
 .full #amount input {
-  width: auto;
+  width: calc(100% - 50px);
   text-align: center;
   box-shadow: none;
 }
 .full #amounts {
-  pointer-events: none;
   box-shadow: 0 3px 10px -5px #000;
 }
 #main.loading #back::after {
@@ -284,7 +308,7 @@ body {
   position: absolute;
   box-sizing: border-box;
   background: #fff;
-  bottom: 95px;
+  bottom: 25%;
   display: block;
   transition: all .2s ease;
 }
@@ -369,11 +393,11 @@ body {
     border-radius: 0;
   }
 }
-@media screen and (max-width: 700px) and (max-height: 450px) {
+@media screen and (max-height: 450px) {
   #main {
-    box-shadow: none;
     height: 100%;
     top: 0;
+    border-radius: 0;
   }
   #main.full {
     --offset: -9000px
@@ -387,7 +411,10 @@ body {
   #amounts {
     width: 80%;
     left: 10%;
-    margin-top: calc(30vh - 125px);
+  }
+  #default-amounts {
+    width: 70%;
+    left: 15%;
   }
   #main {
     height: 100%;
@@ -397,8 +424,35 @@ body {
   #main.full {
     --offset: -9000px
   }
+  #thanks {
+    top: 25%;
+  }
+}
+@media screen and (max-height: 375px) {
+  #default-amounts {
+    display: none;
+  }
+}
+@media screen and (max-height: 360px) {
+  #amounts {
+    top: -20%;
+  }
+  #form {
+    bottom: 20%;
+  }
+  #main {
+    width: 100%;
+    left: 0;
+    border-radius: 0;
+  }
 }
 
+@media screen and (max-width: 300px) {
+  #default-amounts {
+    width: 90%;
+    left: 5%
+  }
+}
 #payments {
   position: absolute;
   height: 200px;
@@ -431,20 +485,33 @@ body {
 #payments li:not(:last-child) {
   border-bottom: 1px solid #0002;
 }
+input[disabled] {
+  opacity: 1;
+  -webkit-text-fill-color: #000;
+}
 
 #error {
   display: inline-block;
-  color: red;
+  color: #d00;
   font-size: 17px;
   padding: 10px;
   position: absolute;
   top: 0;
   width: 250px;
   left: calc(50% - 125px);
-  border-radius: 10px;
-  margin-top: 20px;
-  box-shadow: 0 1px 8px -5px #000;
+  border-radius: 0 0 10px 10px;
+  margin-top: 0px;
+  box-shadow: 0 4px 15px -10px #000;
   z-index: 2;
   background: #fff;
   box-sizing: border-box;
+  transition: all .5s ease;
+}
+#amount-form {
+  height: calc(100% - 50px);
+  position: relative;
+}
+
+.full #amount-form {
+  pointer-events: none;
 }

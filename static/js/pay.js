@@ -27,7 +27,7 @@ function _formatTime()
     }
     else
     {
-      const days_ago = Math.floor(delta/86400000);
+      const days_ago = Math.round((new Date().setHours(0,0,0,0) - new Date(d).setHours(0,0,0,0))/86400000);
       switch (days_ago)
       {
       case 0:
@@ -88,6 +88,7 @@ function _showPaymentPrompt()
   amountElement.disabled = true;
   amountElement.blur();
   mainElement.classList.add('full');
+  [...document.getElementsByClassName('button')].forEach(e => e.disabled = true);
   fetch('/prepare-payment',
         { method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ amount: parseFloat(amountElement.value) * 100 || 1000 }) })
@@ -120,8 +121,9 @@ function loading(wanted)
 
 function _cancel()
 {
-  mainElement.classList.remove('loaded');
   loading(true);
+  mainElement.classList.remove('loaded');
+  [...document.getElementsByClassName('button')].forEach(e => e.disabled = false);
   payElement.onclick = _showPaymentPrompt;
   card.destroy();
   amountElement.disabled = false;
@@ -149,7 +151,7 @@ function initStripe()
   });
   amountElement.addEventListener('input', _updateTax);
   _updateTax();
-  [...document.getElementsByClassName('button')].forEach(e => e.addEventListener('click', () => { amountElement.value = e.textContent; _updateTax(); }));
+  [...document.getElementsByClassName('button')].forEach(e => e.addEventListener('click', (ev) => { ev.preventDefault(); amountElement.value = e.textContent; _updateTax(); }));
   loading(false);
 }
 

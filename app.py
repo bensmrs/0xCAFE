@@ -39,8 +39,3 @@ def create_payment_intent():
         return jsonify(clientSecret=intent['client_secret'])
     except Exception as e:
         return jsonify(error=str(e)), 403
-
-
-if __name__ == '__main__':
-    app.run(host="localhost", port=4242, debug=True, ssl_context='adhoc')
-
