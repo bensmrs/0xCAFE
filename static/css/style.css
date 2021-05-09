@@ -418,7 +418,7 @@ body.full #pay:after {
   padding: 5px;
   box-sizing: border-box;
 }
-#goal span {
+#goal > span {
   width: 100%;
   text-align: center;
   display: inline-block;
@@ -515,16 +515,14 @@ body.full #pay:after {
   width: 4px;
   position: absolute;
   right: 1px;
-  box-shadow: 17px -2px #f51, 17px 0 #f51, 17px 2px #f51, 17px 4px #f51, 17px 6px #f51, 17px 8px #f51, 17px 10px #f51, 17px 12px #f51, 17px 14px #f51;
+  box-shadow: 17px -2px var(--right-color), 17px 0 var(--right-color), 17px 2px var(--right-color), 17px 4px var(--right-color), 17px 6px var(--right-color), 17px 8px var(--right-color), 17px 10px var(--right-color), 17px 12px var(--right-color), 17px 14px var(--right-color);
   content: "€";
   top: 4px;
   left: 18px;
   color: #fff;
   font-weight: bold;
   font-size: 10px;
-}
-.cash .icon:after {
-  font-size: 10px;
+  --right-color: #e86;
 }
 #payments > span {
   position: relative;

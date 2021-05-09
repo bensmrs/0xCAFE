@@ -2,14 +2,15 @@
 
 
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from os.path import join
 
 import stripe
 from flask import Flask, render_template, jsonify, request
+from sqlalchemy import func
 
 from .settings import (STATIC_FOLDER, STATIC_URL, TEMPLATE_FOLDER, PUBKEY, PRIVKEY, WEBHOOK_SECRET,
-                       TZ)
+                       TZ, MONTHLY_TARGET)
 from .database import init_db, db_session
 from .models import Transaction
 
@@ -34,10 +35,23 @@ def index():
     """
     Home page view
     """
+    now = datetime.now()
+    start = datetime(now.year, now.month, 1, tzinfo=TZ)
+    end = start + timedelta(days=32)
+    end = datetime(end.year, end.month, 1, tzinfo=TZ)
+
+    amount = Transaction.query.with_entities(func.sum(Transaction.amount)) \
+                        .filter(Transaction.timestamp >= int(start.timestamp())) \
+                        .filter(Transaction.timestamp < int(end.timestamp()))[0][0]
+
+    transactions = Transaction.query.order_by(Transaction.timestamp.desc()).limit(9)
+
     payments = [{'date': datetime.fromtimestamp(txn.timestamp, TZ).isoformat(),
                  'amount': txn.amount / 100,
-                 'what': txn.what} for txn in Transaction.query.limit(5)]
-    return render_template('index.html', payments = payments, amount=35, target=50, percent=70)
+                 'what': txn.what} for txn in transactions]
+    return render_template('index.html', payments=payments, amount=f'{amount/100:.2f}',
+                           target=f'{MONTHLY_TARGET/100:.2f}',
+                           percent=100 * amount / MONTHLY_TARGET)
 
 
 @app.route('/public-key', methods=['GET'])

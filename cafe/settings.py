@@ -15,6 +15,8 @@ STATIC_FOLDER = 'static'
 STATIC_URL = ''
 TEMPLATE_FOLDER = 'templates'
 
+MONTHLY_TARGET = 5000
+
 PRIVKEY = 'sk_test_51In3owKZdjBRnbvgstWYpen5QXrSrHR2xtmJPyAAZYiXXpYHfTdQSd1oS1izEPdyDt5EvUCK' \
           'EuIEgEByqM09fr7j00vazMmBrR'
 PUBKEY = 'pk_test_51In3owKZdjBRnbvgCtvzBLSf7aG4tXNbQDUGqunoTHLgMzCmPdek314KPSQaUyLlAzqPdKN0J' \
