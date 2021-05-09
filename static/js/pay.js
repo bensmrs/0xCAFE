@@ -8,22 +8,23 @@ var formElement = document.getElementById('form');
 var backElement = document.getElementById('back');
 var taxElement = document.getElementById('tax');
 var card = null;
+var lastTouchEnd = 0;
 
 function _formatTime()
 {
-  [...document.getElementsByClassName('time')].forEach(e =>
+  [...document.getElementsByClassName('payment')].forEach(e =>
   {
     let d = Date.parse(e.dataset.date);
     let delta = Date.now() - d;
     if (delta < 60 * 1000)
-      e.innerHTML = "Il y a moins d’une minute";
+      e.title = "Il y a moins d’une minute";
     else if (delta < 60 * 60 * 1000)
     {
       const minutes = Math.round(delta/60000);
       if (minutes == 1)
-        e.innerHTML = `Il y a une minute`;
+        e.title = `Il y a une minute`;
       else
-        e.innerHTML = `Il y a ${minutes} minutes`;
+        e.title = `Il y a ${minutes} minutes`;
     }
     else
     {
@@ -31,20 +32,19 @@ function _formatTime()
       switch (days_ago)
       {
       case 0:
-        e.innerHTML = "Aujourd'hui à " + new Date(d).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        e.title = "Aujourd'hui à " + new Date(d).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         break;
       case 1:
-        e.innerHTML = "Hier à " + new Date(d).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        e.title = "Hier à " + new Date(d).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         break;
       case 2:
-        e.innerHTML = "Avant-hier à " + new Date(d).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        e.title = "Avant-hier à " + new Date(d).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         break;
       default:
-        e.innerHTML = new Date(d).toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'})
+        e.title = new Date(d).toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'})
       }
     }
   });
-  [...document.getElementsByClassName('amount')].forEach(e => e.textContent = parseFloat(e.textContent).toLocaleString('fr-FR', { minimumFractionDigits: 2 }));
 }
 
 function _getPublicKey()
@@ -87,11 +87,11 @@ function _showPaymentPrompt()
   loading(true);
   amountElement.disabled = true;
   amountElement.blur();
-  mainElement.classList.add('full');
+  document.body.classList.add('full');
   [...document.getElementsByClassName('button')].forEach(e => e.disabled = true);
   fetch('/prepare-payment',
         { method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ amount: parseFloat(amountElement.value) * 100 || 1000 }) })
+          body: JSON.stringify({ amount: Math.round(parseFloat(amountElement.value) * 100) || 1000 }) })
     .then(resp => resp.json())
     .then(data =>
     {
@@ -127,7 +127,7 @@ function _cancel()
   payElement.onclick = _showPaymentPrompt;
   card.destroy();
   amountElement.disabled = false;
-  mainElement.classList.remove('full');
+  document.body.classList.remove('full');
   loading(false);
 }
 
@@ -140,7 +140,15 @@ function _updateTax()
 function initStripe()
 {
   loading(true);
+  document.addEventListener('touchend', function (event)
+  {
+    var now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300)
+      event.preventDefault();
+    lastTouchEnd = now;
+  }, { passive: false });
   _formatTime();
+  [...document.getElementsByClassName('amount')].forEach(e => e.textContent = parseFloat(e.textContent).toLocaleString('fr-FR', { minimumFractionDigits: 2 }));
   _getPublicKey().then(key => { stripe = Stripe(key); });
   payElement.onclick = _showPaymentPrompt;
   backElement.addEventListener('click', _cancel);

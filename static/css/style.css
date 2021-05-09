@@ -29,8 +29,10 @@ body {
   overflow: hidden;
   position: relative;
   touch-action: none;
+  --dark-brown: #5b4c3c;
+  --light-brown: #80705f;
 }
-#main:not(.full) #amount:before {
+body:not(.full) #amount:before {
   content: "Donner ";
 }
 #amount:after {
@@ -48,7 +50,7 @@ body {
   border-radius: 10px;
   padding: 0 8px;
   font-family: "IBM Plex Mono", monospace;
-  width: 30%;
+  width: 100px;
   text-align: right;
   margin: 0 10px;
   transition: all .2s ease;
@@ -87,8 +89,7 @@ button {
 .button:not(:last-child) {
   margin-right: 15px;
 }
-#main::before,
-#main::after {
+#main::before, #main::after {
   content: '';
   position: absolute;
   width: 6000px;
@@ -100,12 +101,12 @@ button {
 }
  
 #main::before {
-  background: #80705f;
+  background: var(--light-brown);
   animation: waves 8s linear infinite;
 }
  
 #main::after {
-  background: #5b4c3c;
+  background: var(--dark-brown);
   animation: waves 15s linear infinite;
 }
  
@@ -127,7 +128,7 @@ button {
     transform: rotate(360deg);
   }
 }
-#main.full {
+body.full #main {
   --offset: -10000px;
 }
 #main #pay {
@@ -222,7 +223,7 @@ button {
   }
 }
 
-#main.full #back {
+body.full #back {
   width: 40px;
   height: 40px;
   position: absolute;
@@ -233,7 +234,7 @@ button {
   border-radius: 20px;
   cursor: pointer;
 }
-#main.full #back:after {
+body.full #back:after {
   content: "";
   height: 10px;
   width: 10px;
@@ -257,7 +258,7 @@ button {
 #main .button:focus, #main .button:active {
   border: 2px solid #5b4c3c60;
 }
-.full #form {
+body.full #form {
   opacity: 1;
 }
 
@@ -277,12 +278,12 @@ button {
   padding: 10px;
 }
 
-.full #amount input {
+body.full #amount input {
   width: calc(100% - 50px);
   text-align: center;
   box-shadow: none;
 }
-.full #amounts {
+body.full #amounts {
   box-shadow: 0 3px 10px -5px #000;
 }
 #main.loading #back::after {
@@ -325,7 +326,7 @@ button {
   opacity: 0;
 }
 
-.full #default-amounts, .done #default-amounts {
+body.full #default-amounts, .done #default-amounts {
   opacity: 0;
 }
 
@@ -336,7 +337,7 @@ button {
 .done #pay:after {
   content: "Accueil";
 }
-.full #pay:after {
+body.full #pay:after {
   content: "Payer";
 }
 #pay:after {
@@ -368,22 +369,229 @@ button {
   font-size: 16px;
   display: inline;
 }
-@media screen and (max-width: 1200px) {
-  #main {
-    left: 10%;
-  }
+
+#goal-header::before {
+  content: "Objectif du mois";
+}
+#goal-cup {
+  position: relative;
+  height: 30px;
+  width: 8px;
+  transform: rotate(45deg);
+  left: 77px;
+}
+#goal-cup::after {
+  display: block;
+  border-radius: 2px 2px 15px 15px;
+  background: linear-gradient(to right, #0001, #0000), linear-gradient(to top, var(--dark-brown) calc(var(--goal) * .8), var(--light-brown) calc(var(--goal) * .8), var(--light-brown) var(--goal), #fff var(--goal));
+  height: 80px;
+  content: '';
+  width: 70px;
+  position: relative;
+  border: 5px solid #ddd;
+  border-top: 0;
+  transform: rotate(-45deg);
+  top: 18px;
+}
+#goal-cup::before {
+  content: "";
+  display: block;
+  background: #0000;
+  height: 14px;
+  width: 20px;
+  border-radius: 100px;
+  border: 8px solid #ddd;
+  position: absolute;
+  top: 12px;
+  left: 52px;
+  transform: rotate(-45deg);
+}
+#goal-cup.full {
+  --goal: 100%;
+  box-shadow: -12px 12px #0002, 8px -8px #0002;
+}
+#goal-amount {
+  position: relative;
+  top: 86px;
+}
+#goal {
+  padding: 5px;
+  box-sizing: border-box;
+}
+#goal span {
+  width: 100%;
+  text-align: center;
+  display: inline-block;
+}
+#transactions {
+  perspective: 1000px;
+  width: 160px;
+  height: 170px;
+  position: absolute;
+  right: calc(25% - 242.5px);
+  top: calc(50% - 85px);
+  z-index: 10;
+  opacity: 1;
+  transition: all .5s ease;
+}
+#transactions-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 1px 8px -5px #000;
+  border-radius: 20px;
+}
+#transactions:hover #transactions-inner {
+  transform: rotateY(180deg);
+}
+#transactions-inner > * {
+  position: absolute;
+  width: 160px;
+  height: 170px;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 20px;
+  background: #fff;
+}
+#payments {
+  background: #fff;
+  transform: rotateY(180deg);
+  text-align: center;
+}
+.card .icon {
+  height: 25px;
+  width: 40px;
+  border-radius: 2px;
+  background: #ddd;
+  margin-left: 3px;
+}
+.card .icon:after {
+  width: 100%;
+  height: 4px;
+  content: "";
+  background: #000;
+  display: block;
+  top: 3px;
+  position: relative;
+}
+.payment {
+  width: 46px;
+  height: 43px;
+  display: inline-block;
+  border-radius: 3px;
+  margin: 3px;
+  box-shadow: 0 1px 3px -2px #000;
+  font-size: 11px;
+  vertical-align: top;
+  cursor: default;
+}
+.payment .icon {
+  margin-top: 3px;
+}
+.cash .icon {
+  height: 21px;
+  width: 40px;
+  background: linear-gradient(to right, #ddd 8px, #e1b48c 8px, #e1b48c 38px, #ddd 38px);
+  margin-left: 3px;
+  position: relative;
+  top: 2px;
+  margin-bottom: 4px;
+}
+.cash .icon:before {
+  width: 4px;
+  height: 3px;
+  content: "";
+  background: #4646d2;
+  display: block;
+  position: relative;
+  top: 2px;
+  left: 4px;
+}
+.cash .icon:after {
+  display: block;
+  height: 1px;
+  width: 4px;
+  position: absolute;
+  right: 1px;
+  box-shadow: 17px -2px #f51, 17px 0 #f51, 17px 2px #f51, 17px 4px #f51, 17px 6px #f51, 17px 8px #f51, 17px 10px #f51, 17px 12px #f51, 17px 14px #f51;
+  content: "€";
+  top: 4px;
+  left: 18px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 10px;
+}
+.cash .icon:after {
+  font-size: 10px;
+}
+#payments > span {
+  position: relative;
+  top: 2px;
+}
+#payments > span:after {
+  content: "Derniers paiements";
 }
 @media screen and (max-width: 1100px) {
   #main {
-    left: 5%;
+    left: calc(33.333333% - 270px + (2 * env(safe-area-inset-left) - env(safe-area-inset-right)) / 3);
+  }
+  #transactions {
+    right: calc(33.333333% - 270px + (2 * env(safe-area-inset-right) - env(safe-area-inset-left)) / 3);
   }
 }
-@media screen and (max-width: 1000px) {
-  #payments {
-    display: none;
-  }
+@media screen and (max-width: 850px) {
   #main {
     left: calc(50% - 325px);
+  }
+  #transactions-inner {
+    display: none;
+    pointer-events: none;
+  }
+  #transactions {
+    right: 20px;
+    top: 20px;
+    width: 50px;
+    height: 50px;
+    background: #0004;
+    border-radius: 25px;
+  }
+  #transactions::after {
+    content: "";
+    width: 50%;
+    height: 50%;
+    display: inline-block;
+    background: linear-gradient(to top, #0000 40%, #fff 40%, #fff 60%, #0000 60%), linear-gradient(60deg, #0000 41.34%, #fff 41.34%, #fff 58.66%, #0000 58.66%), linear-gradient(120deg, #0000 41.34%, #fff 41.34%, #fff 58.66%, #0000 58.66%);
+    top: 25%;
+    left: 25%;
+    position: relative;
+    border-radius: 100%;
+  }
+  #transactions:hover #transactions-inner {
+    display: block;
+    transform: none;
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 100vw;
+    height: 100vh;
+    background: #0008;
+    border-radius: 0;
+  }
+  #transactions:hover #goal {
+    top: calc(50% - 85px);
+    left: calc(33.333333% - 106.666667px);
+  }
+  #transactions:hover #payments {
+    top: calc(50% - 85px);
+    right: calc(33.333333% - 106.666667px);
+  }
+  #payments {
+    transform: none;
+  }
+  body.full #transactions {
+    opacity: 0;
   }
 }
 @media screen and (max-width: 700px) {
@@ -399,7 +607,7 @@ button {
     top: 0;
     border-radius: 0;
   }
-  #main.full {
+  body.full #main {
     --offset: -9000px
   }
 }
@@ -421,7 +629,7 @@ button {
     top: 0;
     box-shadow: none;
   }
-  #main.full {
+  body.full #main {
     --offset: -9000px
   }
   #thanks {
@@ -445,45 +653,20 @@ button {
     left: 0;
     border-radius: 0;
   }
+  body.full #transactions {
+    opacity: 0;
+  }
 }
-
+@media screen and (max-width: 350px) {
+  #transactions {
+    display: none;
+  }
+}
 @media screen and (max-width: 300px) {
   #default-amounts {
     width: 90%;
     left: 5%
   }
-}
-#payments {
-  position: absolute;
-  height: 200px;
-  right: 0;
-  top: calc(50% - 100px);
-  list-style: none;
-  padding: 0;
-  box-sizing: border-box;
-  margin: 0;
-  width: 250px;
-}
-#payments li {
-  height: 40px;
-  line-height: 40px;
-  padding: 0 15px;
-  box-sizing: border-box;
-}
-#payments .amount {
-  float: right;
-  border-left: 1px solid #0002;
-  padding-left: 10px;
-}
-#payments .amount:after {
-  content: " €";
-}
-#payments .time {
-  font-size: 12px;
-}
-
-#payments li:not(:last-child) {
-  border-bottom: 1px solid #0002;
 }
 input[disabled] {
   opacity: 1;
@@ -512,6 +695,6 @@ input[disabled] {
   position: relative;
 }
 
-.full #amount-form {
+body.full #amount-form {
   pointer-events: none;
 }
