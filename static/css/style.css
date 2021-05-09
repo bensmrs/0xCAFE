@@ -1,11 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Lato&display=swap');
-
 html {
   height  : 100%;
   overflow: hidden;
   position: relative;
 }
-
 #main {
   width: 650px;
   height: 420px;
@@ -99,17 +97,14 @@ button {
   border-radius: 47%;
   transition: 2s bottom ease-in-out;
 }
- 
 #main::before {
   background: var(--light-brown);
   animation: waves 8s linear infinite;
 }
- 
 #main::after {
   background: var(--dark-brown);
   animation: waves 15s linear infinite;
 }
- 
 @keyframes waves {
   0% {
     transform: translate(-50%, -75%) rotate(0deg);
@@ -159,7 +154,6 @@ body.full #main {
   background: #fff3;
   box-shadow: 0 3px 15px -6px #000;
 }
-
 #tax:after {
   content: " € de frais)";
 }
@@ -185,7 +179,6 @@ body.full #main {
   top: 10%;
   padding: 10px 0;
 }
-
 #main.loading #pay {
   color: transparent;
   width: 10px;
@@ -222,7 +215,6 @@ body.full #main {
     box-shadow: 15px 0 0 #fff3, -15px 0 0 #fff3;
   }
 }
-
 body.full #back {
   width: 40px;
   height: 40px;
@@ -247,7 +239,6 @@ body.full #back:after {
   left: 14px;
   transition: all .2s ease;
 }
-
 #main .button:hover {
   background: #f8f8f8;
   box-shadow: 0 4px 9px -8px #000, inset 0 2px 5px -7px #000;
@@ -261,11 +252,9 @@ body.full #back:after {
 body.full #form {
   opacity: 1;
 }
-
 .hidden {
   opacity: 0;
 }
-
 #card-error {
   color: rgb(105, 115, 134);
   text-align: left;
@@ -273,11 +262,9 @@ body.full #form {
   line-height: 17px;
   margin-top: 12px;
 }
-
 #card {
   padding: 10px;
 }
-
 body.full #amount input {
   width: calc(100% - 50px);
   text-align: center;
@@ -298,7 +285,6 @@ body.full #amounts {
 #main.loading #back {
   pointer-events: none;
 }
-
 #form {
   opacity: 0;
   width: 80%;
@@ -313,27 +299,21 @@ body.full #amounts {
   display: block;
   transition: all .2s ease;
 }
-
 #main.loading #back {
   animation: spin 2s linear infinite;
 }
-
 #main.loading:not(.loaded) #form {
   opacity: 0;
 }
-
 .loading:not(.loaded) #amounts, .done #amounts {
   opacity: 0;
 }
-
 body.full #default-amounts, .done #default-amounts {
   opacity: 0;
 }
-
 #main .button:after {
   content: " €";
 }
-
 .done #pay:after {
   content: "Accueil";
 }
@@ -343,7 +323,6 @@ body.full #pay:after {
 #pay:after {
   content: "Continuer";
 }
-
 #thanks {
   opacity: 0;
   transition: all .5s ease;
@@ -599,6 +578,11 @@ body.full #pay:after {
     border-radius: 0;
   }
 }
+@media screen and (max-height: 470px) {
+  footer {
+    display: none;
+  }
+}
 @media screen and (max-height: 450px) {
   #main {
     height: 100%;
@@ -670,7 +654,6 @@ input[disabled] {
   opacity: 1;
   -webkit-text-fill-color: #000;
 }
-
 #error {
   display: inline-block;
   color: #d00;
@@ -692,7 +675,20 @@ input[disabled] {
   height: calc(100% - 50px);
   position: relative;
 }
-
 body.full #amount-form {
   pointer-events: none;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: revert;
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 5px 0;
+  font-size: 12px;
 }
