@@ -70,7 +70,7 @@ function _pay(card, clientSecret)
 function _orderComplete(paymentIntentId)
 {
   loading(false);
-  mainElement.className = 'done';
+  document.body.className = 'done';
   payElement.onclick = () => window.location.reload();
 }
 
